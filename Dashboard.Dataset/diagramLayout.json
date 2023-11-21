@@ -10,8 +10,8 @@
       "nodes": [
         {
           "location": {
-            "x": 471.62637824859269,
-            "y": 12.5
+            "x": 425.37637824859269,
+            "y": 0
           },
           "nodeIndex": "Countries",
           "nodeLineageTag": "c529d29a-7fac-4350-a8b6-dbaa24951f27",
@@ -24,7 +24,7 @@
         {
           "location": {
             "x": 136.67770411834698,
-            "y": 81.34208453761515
+            "y": 87.59208453761515
           },
           "nodeIndex": "_measures",
           "nodeLineageTag": "0cdcbca9-42d4-46af-8e72-771629b81a7a",
@@ -36,8 +36,8 @@
         },
         {
           "location": {
-            "x": 810.88354625455872,
-            "y": 245.50078757062448
+            "x": 758.38354625455872,
+            "y": 258.00078757062448
           },
           "nodeIndex": "indicators",
           "nodeLineageTag": "f3b3bee9-93a4-468f-9c62-d524ed7612f6",
@@ -46,6 +46,19 @@
             "width": 234
           },
           "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 773.20584213621169,
+            "y": 0
+          },
+          "nodeIndex": "Nasa_Temp",
+          "nodeLineageTag": "25d5c6f7-0ba5-4d67-8210-9e1a5c8145c6",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",

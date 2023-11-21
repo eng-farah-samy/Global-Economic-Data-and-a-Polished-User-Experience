@@ -4,7 +4,7 @@
     "annotations": [
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"source_Countries\",\"source-indicators\",\"_measures\",\"source_Land_indicators_2020\",\"indicators\",\"Countries\"]"
+        "value": "[\"source_Countries\",\"source-indicators\",\"_measures\",\"source_Land_indicators_2020\",\"indicators\",\"Countries\",\"nasa-global-temp-data\",\"Nasa_Temp\"]"
       },
       {
         "name": "__PBI_TimeIntelligenceEnabled",
@@ -124,6 +124,29 @@
         ],
         "kind": "m",
         "lineageTag": "611ce263-91f5-4666-9a9f-8cb913c13418"
+      },
+      {
+        "name": "nasa-global-temp-data",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "expression": [
+          "let",
+          "    Source = Csv.Document(File.Contents(\"G:\\My department\\courses\\Data analysis\\EDX\\POWERBI\\edx-power-bi-exercise-files\\Week 2\\nasa-global-temp-data.csv\"),[Delimiter=\",\", Columns=2, Encoding=1252, QuoteStyle=QuoteStyle.None]),",
+          "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+          "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"Year\", Int64.Type}, {\"TempC\", type number}})",
+          "in",
+          "    #\"Changed Type\""
+        ],
+        "kind": "m",
+        "lineageTag": "b52341aa-47e8-41fa-87c8-e4375c021c5c"
       }
     ],
     "relationships": [
@@ -133,6 +156,13 @@
         "fromTable": "indicators",
         "toColumn": "id",
         "toTable": "Countries"
+      },
+      {
+        "name": "57ce2044-4f25-4114-bcc7-bc43f3d44ecd",
+        "fromColumn": "Year",
+        "fromTable": "indicators",
+        "toColumn": "Year",
+        "toTable": "Nasa_Temp"
       }
     ],
     "sourceQueryCulture": "en-US",
@@ -560,7 +590,7 @@
             "formatString": "0",
             "lineageTag": "3754e70c-117b-44dd-b723-12a8bba3ea72",
             "sourceColumn": "Year",
-            "summarizeBy": "sum"
+            "summarizeBy": "none"
           },
           {
             "name": "indicator value",
@@ -739,6 +769,76 @@
                 "    Source = Table.NestedJoin(source_Countries, {\"id\"}, source_Land_indicators_2020, {\"Country Code\"}, \"Land_indicators_2020\", JoinKind.Inner),",
                 "    #\"Expanded Land_indicators_2020\" = Table.ExpandTableColumn(Source, \"Land_indicators_2020\", {\"Land Area\"}, {\"Land Area\"}),",
                 "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded Land_indicators_2020\",{{\"region\", \"name\"}, {\"value\", \"region\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Nasa_Temp",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "30cc28a7-21f3-425c-909e-5e53d12bd87d",
+            "sourceColumn": "Year",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Temp",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "63ac84ec-781e-4e97-88b4-96cd05c0b994",
+            "sourceColumn": "Temp",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "25d5c6f7-0ba5-4d67-8210-9e1a5c8145c6",
+        "partitions": [
+          {
+            "name": "Nasa_Temp",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = #\"source-indicators\",",
+                "    #\"Filtered Rows\" = Table.SelectRows(Source, each [Series Code] <> \"AG.LND.TOTL.K2\"),",
+                "    Year1 = #\"Filtered Rows\"[Year],",
+                "    #\"Removed Duplicates\" = List.Distinct(Year1),",
+                "    #\"Converted to Table\" = Table.FromList(#\"Removed Duplicates\", Splitter.SplitByNothing(), null, null, ExtraValues.Error),",
+                "    #\"Merged Queries\" = Table.NestedJoin(#\"Converted to Table\", {\"Column1\"}, #\"nasa-global-temp-data\", {\"Year\"}, \"nasa-global-temp-data\", JoinKind.LeftOuter),",
+                "    #\"Expanded nasa-global-temp-data\" = Table.ExpandTableColumn(#\"Merged Queries\", \"nasa-global-temp-data\", {\"TempC\"}, {\"nasa-global-temp-data.TempC\"}),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Expanded nasa-global-temp-data\",{{\"Column1\", Int64.Type}}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Changed Type\",{{\"Column1\", \"Year\"}, {\"nasa-global-temp-data.TempC\", \"Temp\"}})",
                 "in",
                 "    #\"Renamed Columns\""
               ],
