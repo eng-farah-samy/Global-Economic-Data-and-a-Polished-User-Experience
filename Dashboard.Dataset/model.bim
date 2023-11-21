@@ -1,0 +1,752 @@
+{
+  "compatibilityLevel": 1567,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"source_Countries\",\"source-indicators\",\"_measures\",\"source_Land_indicators_2020\",\"indicators\",\"Countries\"]"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.123.684.0 (23.11)"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "DynamicImprovement": "HighConfidence",
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "source_Land_indicators_2020",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "expression": [
+          "let",
+          "    Source = #\"source-indicators\",",
+          "    #\"Filtered Rows\" = Table.SelectRows(Source, each ([Series Code] = \"AG.LND.TOTL.K2\")),",
+          "    #\"Filtered Rows1\" = Table.SelectRows(#\"Filtered Rows\", each [Year] = 2020),",
+          "    #\"Removed Columns\" = Table.RemoveColumns(#\"Filtered Rows1\",{\"Series Name\", \"Series Code\", \"Year\"}),",
+          "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns\",{{\"indicator value\", \"Land Area\"}})",
+          "in",
+          "    #\"Renamed Columns\""
+        ],
+        "kind": "m",
+        "lineageTag": "686216ce-7b27-42a5-8262-385b20bb1a4a"
+      },
+      {
+        "name": "source_Countries",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "expression": [
+          "let",
+          "    Source = Json.Document(File.Contents(\"G:\\My department\\courses\\Data analysis\\EDX\\POWERBI\\edx-power-bi-exercise-files\\Week 2\\countries.json\")),",
+          "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),",
+          "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Converted to Table\",{{\"Column1\", type any}}),",
+          "    Column1 = #\"Changed Type\"{1}[Column1],",
+          "    #\"Converted to Table1\" = Table.FromList(Column1, Splitter.SplitByNothing(), null, null, ExtraValues.Error),",
+          "    #\"Expanded Column1\" = Table.ExpandRecordColumn(#\"Converted to Table1\", \"Column1\", {\"id\", \"iso2Code\", \"name\", \"region\", \"capitalCity\", \"longitude\", \"latitude\"}, {\"id\", \"iso2Code\", \"name\", \"region\", \"capitalCity\", \"longitude\", \"latitude\"}),",
+          "    #\"Expanded region\" = Table.ExpandRecordColumn(#\"Expanded Column1\", \"region\", {\"value\"}, {\"value\"}),",
+          "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded region\",{{\"name\", \"region\"}}),",
+          "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Renamed Columns\",{{\"id\", type text}, {\"iso2Code\", type text}, {\"region\", type text}, {\"value\", type text}, {\"capitalCity\", type text}, {\"longitude\", type number}, {\"latitude\", type number}}),",
+          "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type1\", each [value] <> \"Aggregates\")",
+          "in",
+          "    #\"Filtered Rows\""
+        ],
+        "kind": "m",
+        "lineageTag": "e55639e7-84f0-4db4-93b9-a8b8875533ed"
+      },
+      {
+        "name": "source-indicators",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "expression": [
+          "let",
+          "    Source = Csv.Document(File.Contents(\"G:\\My department\\courses\\Data analysis\\EDX\\POWERBI\\edx-power-bi-exercise-files\\Week 2\\countries-indicators.csv\"),[Delimiter=\",\", Columns=54, Encoding=1252, QuoteStyle=QuoteStyle.None]),",
+          "    #\"Changed Type\" = Table.TransformColumnTypes(Source,{{\"Column1\", type text}, {\"Column2\", type text}, {\"Column3\", type text}, {\"Column4\", type text}, {\"Column5\", type text}, {\"Column6\", type text}, {\"Column7\", type text}, {\"Column8\", type text}, {\"Column9\", type text}, {\"Column10\", type text}, {\"Column11\", type text}, {\"Column12\", type text}, {\"Column13\", type text}, {\"Column14\", type text}, {\"Column15\", type text}, {\"Column16\", type text}, {\"Column17\", type text}, {\"Column18\", type text}, {\"Column19\", type text}, {\"Column20\", type text}, {\"Column21\", type text}, {\"Column22\", type text}, {\"Column23\", type text}, {\"Column24\", type text}, {\"Column25\", type text}, {\"Column26\", type text}, {\"Column27\", type text}, {\"Column28\", type text}, {\"Column29\", type text}, {\"Column30\", type text}, {\"Column31\", type text}, {\"Column32\", type text}, {\"Column33\", type text}, {\"Column34\", type text}, {\"Column35\", type text}, {\"Column36\", type text}, {\"Column37\", type text}, {\"Column38\", type text}, {\"Column39\", type text}, {\"Column40\", type text}, {\"Column41\", type text}, {\"Column42\", type text}, {\"Column43\", type text}, {\"Column44\", type text}, {\"Column45\", type text}, {\"Column46\", type text}, {\"Column47\", type text}, {\"Column48\", type text}, {\"Column49\", type text}, {\"Column50\", type text}, {\"Column51\", type text}, {\"Column52\", type text}, {\"Column53\", type text}, {\"Column54\", type text}}),",
+          "    #\"Promoted Headers\" = Table.PromoteHeaders(#\"Changed Type\", [PromoteAllScalars=true]),",
+          "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"Country Name\", type text}, {\"Country Code\", type text}, {\"Series Name\", type text}, {\"Series Code\", type text}, {\"1973 [YR1973]\", type text}, {\"1974 [YR1974]\", type text}, {\"1975 [YR1975]\", type text}, {\"1976 [YR1976]\", type text}, {\"1977 [YR1977]\", type text}, {\"1978 [YR1978]\", type text}, {\"1979 [YR1979]\", type text}, {\"1980 [YR1980]\", type text}, {\"1981 [YR1981]\", type text}, {\"1982 [YR1982]\", type text}, {\"1983 [YR1983]\", type text}, {\"1984 [YR1984]\", type text}, {\"1985 [YR1985]\", type text}, {\"1986 [YR1986]\", type text}, {\"1987 [YR1987]\", type text}, {\"1988 [YR1988]\", type text}, {\"1989 [YR1989]\", type text}, {\"1990 [YR1990]\", type text}, {\"1991 [YR1991]\", type text}, {\"1992 [YR1992]\", type text}, {\"1993 [YR1993]\", type text}, {\"1994 [YR1994]\", type text}, {\"1995 [YR1995]\", type text}, {\"1996 [YR1996]\", type text}, {\"1997 [YR1997]\", type text}, {\"1998 [YR1998]\", type text}, {\"1999 [YR1999]\", type text}, {\"2000 [YR2000]\", type text}, {\"2001 [YR2001]\", type text}, {\"2002 [YR2002]\", type text}, {\"2003 [YR2003]\", type text}, {\"2004 [YR2004]\", type text}, {\"2005 [YR2005]\", type text}, {\"2006 [YR2006]\", type text}, {\"2007 [YR2007]\", type text}, {\"2008 [YR2008]\", type text}, {\"2009 [YR2009]\", type text}, {\"2010 [YR2010]\", type text}, {\"2011 [YR2011]\", type text}, {\"2012 [YR2012]\", type text}, {\"2013 [YR2013]\", type text}, {\"2014 [YR2014]\", type text}, {\"2015 [YR2015]\", type text}, {\"2016 [YR2016]\", type text}, {\"2017 [YR2017]\", type text}, {\"2018 [YR2018]\", type text}, {\"2019 [YR2019]\", type text}, {\"2020 [YR2020]\", type text}, {\"2021 [YR2021]\", type text}, {\"2022 [YR2022]\", type text}}),",
+          "    #\"Removed Bottom Rows\" = Table.RemoveLastN(#\"Changed Type1\",5),",
+          "    #\"Removed Columns\" = Table.RemoveColumns(#\"Removed Bottom Rows\",{\"Country Name\"}),",
+          "    #\"Unpivoted Other Columns\" = Table.UnpivotOtherColumns(#\"Removed Columns\", {\"Country Code\", \"Series Name\", \"Series Code\"}, \"Attribute\", \"Value\"),",
+          "    #\"Extracted First Characters\" = Table.TransformColumns(#\"Unpivoted Other Columns\", {{\"Attribute\", each Text.Start(_, 4), type text}}),",
+          "    #\"Filtered Rows\" = Table.SelectRows(#\"Extracted First Characters\", each [Value] <> \"..\"),",
+          "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"Attribute\", \"Year\"}, {\"Value\", \"indicator value\"}}),",
+          "    #\"Changed Type2\" = Table.TransformColumnTypes(#\"Renamed Columns\",{{\"Year\", Int64.Type}, {\"indicator value\", type number}})",
+          "in",
+          "    #\"Changed Type2\""
+        ],
+        "kind": "m",
+        "lineageTag": "611ce263-91f5-4666-9a9f-8cb913c13418"
+      }
+    ],
+    "relationships": [
+      {
+        "name": "18c4e89f-aea3-48d4-b17f-55f57d46186e",
+        "fromColumn": "Country Code",
+        "fromTable": "indicators",
+        "toColumn": "id",
+        "toTable": "Countries"
+      }
+    ],
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "DateTableTemplate_2dc52f1a-8202-42bc-947a-c0a90ce03f39",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "bcc470ec-f5cc-41df-b30b-3ceba627417a",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isHidden": true,
+            "lineageTag": "2e12ce09-6242-43d8-8fe1-203db5d11893",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isHidden": true,
+            "lineageTag": "c63184da-9d02-4618-991b-c6fd25ff17e5",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "53d56b96-c017-46f2-b4a3-f5092e70404f",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "isHidden": true,
+            "lineageTag": "68b325ab-7adb-4a4f-8ed8-0832dc4d63eb",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "c0f409e2-34a2-4c31-97a4-ae95668b1515",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isHidden": true,
+            "lineageTag": "9e57203d-4dcf-4aa1-9829-7c609e773ffd",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "516dd795-bb97-4ed9-aada-90c9abc8155f",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "f0eb6110-8e73-4951-b66e-481f06e47c95",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "366cfafe-5a60-46f2-9bb6-fcceebb1b0cb",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "3526069d-8a26-4b03-b8e5-c082ae86f63a",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "03c363f2-b9fc-40c8-a055-c99da1f78499"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "a71c7858-5802-4c43-b465-024d11cdc099",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_2dc52f1a-8202-42bc-947a-c0a90ce03f39",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "_measures",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "_",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "fe2f2b92-ffe1-4617-aab1-d87e88bf8f43",
+            "sourceColumn": "_",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "0cdcbca9-42d4-46af-8e72-771629b81a7a",
+        "measures": [
+          {
+            "name": "Sumindicatior",
+            "annotations": [
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "changedProperties": [
+              {
+                "property": "IsHidden"
+              }
+            ],
+            "expression": [
+              "",
+              "SUM(indicators[indicator value])"
+            ],
+            "isHidden": true,
+            "lineageTag": "390f4c8e-aeb5-49aa-99cf-fc8c4f7f504f"
+          },
+          {
+            "name": "population",
+            "expression": [
+              "",
+              "CALCULATE([Sumindicatior],",
+              "indicators[Series Code]=\"SP.POP.TOTL\"",
+              ")"
+            ],
+            "formatString": "#,0",
+            "lineageTag": "63e27923-de13-41a8-a42c-394d663220f4"
+          },
+          {
+            "name": "GDP",
+            "expression": [
+              "",
+              "CALCULATE( [Sumindicatior] ,",
+              "indicators[Series Code]=\"NY.GDP.MKTP.KD\"",
+              ")"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "lineageTag": "649182f5-c31b-4bf5-9619-64414673638e"
+          },
+          {
+            "name": "GDP per capita",
+            "expression": [
+              "",
+              "DIVIDE([GDP],[population],0)"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "lineageTag": "81c08139-dc1e-4ef7-b2fb-8179195cb8f4"
+          },
+          {
+            "name": "2020 GDP",
+            "expression": [
+              "",
+              "CALCULATE([GDP],indicators[Year]= 2020)"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "lineageTag": "65f533a7-a4e6-404a-9bc8-48fad7d62f5d"
+          },
+          {
+            "name": "2020 population",
+            "expression": [
+              "",
+              "CALCULATE([population],indicators[Year]= 2020)"
+            ],
+            "formatString": "#,0",
+            "lineageTag": "d4ee6939-7e6b-4b7c-a5b1-c8d147a32c74"
+          },
+          {
+            "name": "2020 GDP per capita",
+            "expression": [
+              "",
+              "CALCULATE([GDP per capita],indicators[Year]= 2020)"
+            ],
+            "formatString": "\\$#,0;(\\$#,0);\\$#,0",
+            "lineageTag": "6f4d0a82-17e3-4bc3-9f59-ea3bf87196b7"
+          },
+          {
+            "name": "2020 pop.Density",
+            "expression": [
+              "",
+              "DIVIDE([2020 population],sum(Countries[Land Area]),0)"
+            ],
+            "formatString": "0.0",
+            "lineageTag": "4c44561a-8a85-491e-9750-c114ac191f6a"
+          },
+          {
+            "name": "GDP annual growth %",
+            "expression": [
+              "",
+              "var Currentyear = SELECTEDVALUE(indicators[Year])",
+              "var currentGDP = CALCULATE([GDP],indicators[Year] = Currentyear )",
+              "var prevyear = CALCULATE([GDP],indicators[Year]= Currentyear -1 )",
+              "var Diff = currentGDP - prevyear ",
+              "var Growthrate = DIVIDE(Diff,prevyear,0)",
+              "return ",
+              "Growthrate "
+            ],
+            "formatString": "0.00%;-0.00%;0.00%",
+            "lineageTag": "85b46b3f-dd7c-421a-b036-494608d02dcc"
+          },
+          {
+            "name": "selected country",
+            "expression": "SELECTEDVALUE(Countries[name])",
+            "lineageTag": "a867b89e-8f93-4462-b99f-a472d76b05e3"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "_measures",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(\"i44FAA==\", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [_ = _t]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(Source,{{\"_\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "indicators",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Country Code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "a4e9a701-48bf-43f3-93e6-c85da4060da6",
+            "sourceColumn": "Country Code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Series Name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d5346c39-ca3e-4a70-8241-b99598cdce35",
+            "sourceColumn": "Series Name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Series Code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "98793c70-a9f4-4fed-aef1-e624a38f93d6",
+            "sourceColumn": "Series Code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "3754e70c-117b-44dd-b723-12a8bba3ea72",
+            "sourceColumn": "Year",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "indicator value",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "269b1159-a556-4ec4-87ff-9b73ea8e7848",
+            "sourceColumn": "indicator value",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "f3b3bee9-93a4-468f-9c62-d524ed7612f6",
+        "partitions": [
+          {
+            "name": "indicators",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = #\"source-indicators\",",
+                "    #\"Filtered Rows\" = Table.SelectRows(Source, each [Series Code] <> \"AG.LND.TOTL.K2\")",
+                "in",
+                "    #\"Filtered Rows\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Countries",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "id",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "8a6dd723-1c01-4792-b26f-bd7c2c14a199",
+            "sourceColumn": "id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "iso2Code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "38fc21fa-989b-43c3-a38a-1db916b94833",
+            "sourceColumn": "iso2Code",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "dd8b0ec2-96eb-40fe-9c04-9e1901785407",
+            "sourceColumn": "name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "region",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d51afea2-1eef-444a-a62c-e9186687fab6",
+            "sourceColumn": "region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "capitalCity",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "abf9e550-147c-41d2-a73e-5f241b694637",
+            "sourceColumn": "capitalCity",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "longitude",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "a97bc60f-5cac-421c-96c4-428952064572",
+            "sourceColumn": "longitude",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "latitude",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "2ef4a76f-232f-4cc3-b419-c9c43f6ac191",
+            "sourceColumn": "latitude",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Land Area",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "360d0829-faa4-4043-a949-8b0bf7069a0a",
+            "sourceColumn": "Land Area",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "c529d29a-7fac-4350-a8b6-dbaa24951f27",
+        "partitions": [
+          {
+            "name": "Countries",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Table.NestedJoin(source_Countries, {\"id\"}, source_Land_indicators_2020, {\"Country Code\"}, \"Land_indicators_2020\", JoinKind.Inner),",
+                "    #\"Expanded Land_indicators_2020\" = Table.ExpandTableColumn(Source, \"Land_indicators_2020\", {\"Land Area\"}, {\"Land Area\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded Land_indicators_2020\",{{\"region\", \"name\"}, {\"value\", \"region\"}})",
+                "in",
+                "    #\"Renamed Columns\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
